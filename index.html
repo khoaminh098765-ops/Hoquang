@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hò Quảng – Di Sản Dân Ca Quảng Nam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif:ital,wght@0,400;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ochre:     #C8832A;
+      --rust:      #8B3A1E;
+      --cream:     #F5EDD8;
+      --parchment: #E8D9B5;
+      --ink:       #1E1208;
+      --copper:    #B06020;
+      --sage:      #5A6B45;
+      --mist:      #9BA89A;
+      --gold:      #D4A044;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Noto Serif', serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── Grain overlay ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999;
+      opacity: .45;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: rgba(245,237,216,.88);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,131,42,.25);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600; font-size: 1.3rem;
+      color: var(--rust);
+      letter-spacing: .06em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--copper);
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--rust); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      padding: 10rem 4rem 6rem 6rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--sage);
+      border: 1px solid var(--sage);
+      padding: .3rem .8rem; margin-bottom: 2rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp .7s .2s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 300; line-height: 1.0;
+      color: var(--rust);
+      opacity: 0; transform: translateY(30px);
+      animation: fadeUp .9s .4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--ochre); }
+    .hero-subtitle {
+      margin-top: 1.8rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--copper);
+      line-height: 1.7;
+      max-width: 38ch;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp .7s .7s forwards;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp .7s 1s forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .85rem 2.2rem;
+      background: var(--rust);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: .8rem; letter-spacing: .15em; text-transform: uppercase;
+      transition: background .25s, transform .2s;
+    }
+    .btn:hover { background: var(--ochre); transform: translateY(-2px); }
+    .btn-arrow { font-size: 1rem; }
+
+    /* decorative line */
+    .hero-line {
+      position: absolute; left: 0; top: 50%;
+      width: 3px; height: 40%; background: var(--ochre);
+      transform: scaleY(0); transform-origin: top;
+      animation: scaleIn 1s .5s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-image {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(200,131,42,.35) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(139,58,30,.25) 0%, transparent 55%),
+        linear-gradient(135deg, #D4A044 0%, #8B3A1E 40%, #1E1208 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-emblem {
+      position: relative;
+      width: min(55vw, 420px); height: min(55vw, 420px);
+      opacity: 0;
+      animation: fadeIn 1.4s .6s forwards;
+    }
+    .emblem-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(245,237,216,.2);
+      animation: spin 40s linear infinite;
+    }
+    .emblem-ring:nth-child(2) { inset: 14%; border-style: dashed; animation-duration: 28s; animation-direction: reverse; }
+    .emblem-ring:nth-child(3) { inset: 28%; border-color: rgba(212,160,68,.35); animation-duration: 20s; }
+    .emblem-center {
+      position: absolute; inset: 35%;
+      background: radial-gradient(circle, rgba(212,160,68,.5), transparent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .emblem-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      color: var(--cream);
+      text-align: center; line-height: 1.1;
+    }
+    .emblem-dots {
+      position: absolute; inset: 0;
+    }
+    .emblem-dots span {
+      position: absolute; width: 6px; height: 6px;
+      background: var(--gold); border-radius: 50%;
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 6rem;
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0; animation: fadeIn 1s 1.5s forwards;
+    }
+    .scroll-hint::before {
+      content: '';
+      display: block; width: 40px; height: 1px;
+      background: var(--mist);
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 7rem 6rem; }
+    .section-label {
+      font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .section-label::before {
+      content: ''; display: block;
+      width: 30px; height: 1px; background: var(--sage);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300; line-height: 1.15;
+      color: var(--rust);
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--ochre); }
+
+    /* ─── ABOUT ─── */
+    .about {
+      background: var(--parchment);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+      align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .about::before {
+      content: '"';
+      position: absolute; top: -2rem; right: 4rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22rem; line-height: 1;
+      color: rgba(200,131,42,.07);
+      pointer-events: none;
+    }
+    .about-body p {
+      line-height: 1.85; color: #3A280A; margin-bottom: 1.2rem; font-size: .97rem;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .stat {
+      padding: 1.5rem;
+      border: 1px solid rgba(200,131,42,.3);
+      background: rgba(245,237,216,.6);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; font-weight: 600;
+      color: var(--rust); line-height: 1;
+    }
+    .stat-label { font-size: .75rem; color: var(--copper); margin-top: .4rem; letter-spacing: .08em; }
+
+    .about-visual {
+      position: relative; height: 480px;
+    }
+    .vis-card {
+      position: absolute;
+      background: var(--ink); color: var(--cream);
+      padding: 2rem; font-size: .88rem; line-height: 1.7;
+    }
+    .vis-card:nth-child(1) { top: 0; right: 0; width: 80%; }
+    .vis-card:nth-child(2) { bottom: 0; left: 0; width: 60%; background: var(--rust); }
+    .vis-card:nth-child(3) {
+      top: 50%; right: 0; transform: translateY(-50%);
+      width: 45%; background: var(--ochre); color: var(--ink);
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-style: italic;
+    }
+    .vis-card-label {
+      font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+      margin-bottom: .6rem; opacity: .65;
+    }
+
+    /* ─── FEATURES / ĐẶCTÍNH ─── */
+    .features {
+      background: var(--ink);
+    }
+    .features .section-label { color: var(--gold); }
+    .features .section-label::before { background: var(--gold); }
+    .features .section-title { color: var(--cream); }
+    .features .section-title em { color: var(--gold); }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      margin-top: 3rem;
+    }
+    .feature-card {
+      background: rgba(255,255,255,.03);
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255,255,255,.07);
+      transition: background .3s, transform .3s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--ochre);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s;
+    }
+    .feature-card:hover { background: rgba(255,255,255,.06); transform: translateY(-4px); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      font-size: 2rem; margin-bottom: 1.2rem;
+    }
+    .feature-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; color: var(--gold);
+      margin-bottom: .8rem;
+    }
+    .feature-desc {
+      font-size: .88rem; line-height: 1.8;
+      color: rgba(245,237,216,.65);
+    }
+
+    /* ─── LÀN ĐIỆU ─── */
+    .melodies {
+      background: var(--cream);
+    }
+    .melodies-intro {
+      max-width: 55ch; margin-bottom: 3.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic; line-height: 1.8;
+      color: var(--copper);
+    }
+    .melody-list { display: flex; flex-direction: column; gap: 0; }
+    .melody-item {
+      display: grid; grid-template-columns: 60px 1fr auto;
+      align-items: center; gap: 2rem;
+      padding: 1.6rem 0;
+      border-bottom: 1px solid rgba(200,131,42,.2);
+      transition: padding-left .3s;
+      cursor: default;
+    }
+    .melody-item:hover { padding-left: 1rem; }
+    .melody-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: rgba(200,131,42,.3); line-height: 1;
+    }
+    .melody-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--rust); margin-bottom: .3rem;
+    }
+    .melody-info p { font-size: .82rem; color: var(--mist); line-height: 1.5; }
+    .melody-tag {
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--sage); background: rgba(90,107,69,.1);
+      padding: .35rem .9rem; border: 1px solid rgba(90,107,69,.3);
+      white-space: nowrap;
+    }
+
+    /* ─── GALLERY / HÌNH ẢNH ─── */
+    .gallery {
+      background: var(--parchment);
+      padding: 7rem 0;
+    }
+    .gallery-inner { padding: 0 6rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(2, 200px);
+      gap: 8px; margin-top: 3rem;
+    }
+    .gallery-cell {
+      overflow: hidden; position: relative;
+    }
+    .gallery-cell:nth-child(1) { grid-column: 1 / 6; grid-row: 1; }
+    .gallery-cell:nth-child(2) { grid-column: 6 / 9; grid-row: 1; }
+    .gallery-cell:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+    .gallery-cell:nth-child(4) { grid-column: 1 / 4; grid-row: 2; }
+    .gallery-cell:nth-child(5) { grid-column: 4 / 9; grid-row: 2; }
+    .gallery-block {
+      width: 100%; height: 100%;
+      display: flex; align-items: flex-end;
+      padding: 1rem 1.2rem;
+      transition: transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-cell:hover .gallery-block { transform: scale(1.04); }
+    .gallery-caption {
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(245,237,216,.85);
+      text-shadow: 0 1px 4px rgba(0,0,0,.5);
+    }
+    .gb1 { background: linear-gradient(160deg, #8B3A1E 0%, #C8832A 100%); }
+    .gb2 { background: linear-gradient(135deg, #5A6B45 0%, #3A280A 80%); }
+    .gb3 { background: linear-gradient(180deg, #1E1208 0%, #8B3A1E 100%); }
+    .gb4 { background: linear-gradient(135deg, #C8832A 0%, #D4A044 100%); }
+    .gb5 { background: linear-gradient(120deg, #3A280A 0%, #5A6B45 100%); }
+    /* decorative pattern overlay */
+    .gallery-block::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,.03) 8px, rgba(255,255,255,.03) 9px);
+    }
+
+    /* ─── QUOTE ─── */
+    .quote-section {
+      background: var(--rust);
+      padding: 6rem;
+      text-align: center;
+    }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem; line-height: .5;
+      color: rgba(245,237,216,.15); display: block; margin-bottom: 1rem;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-style: italic; line-height: 1.5;
+      color: var(--cream); max-width: 70ch; margin: 0 auto;
+    }
+    .quote-attr {
+      margin-top: 2rem;
+      font-size: .75rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(245,237,216,.55);
+    }
+    .quote-line {
+      display: inline-block;
+      width: 40px; height: 1px;
+      background: rgba(245,237,216,.3);
+      vertical-align: middle; margin: 0 1rem;
+    }
+
+    /* ─── LỊCH SỬ ─── */
+    .history {
+      background: var(--cream);
+    }
+    .history-layout {
+      display: grid; grid-template-columns: 1fr 2fr; gap: 6rem;
+      align-items: start; margin-top: 3rem;
+    }
+    .history-aside {
+      position: sticky; top: 7rem;
+    }
+    .history-aside-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--ochre);
+      letter-spacing: .08em; margin-bottom: 1.5rem;
+    }
+    .history-nav { list-style: none; }
+    .history-nav li {
+      padding: .7rem 0;
+      border-bottom: 1px solid rgba(200,131,42,.15);
+      font-size: .82rem; color: var(--mist);
+      cursor: pointer; transition: color .2s, padding-left .2s;
+    }
+    .history-nav li:hover { color: var(--rust); padding-left: .5rem; }
+    .history-entries { }
+    .history-entry {
+      display: grid; grid-template-columns: 80px 1fr; gap: 2rem;
+      margin-bottom: 3rem; position: relative;
+    }
+    .history-entry::before {
+      content: '';
+      position: absolute; left: 40px; top: 0; bottom: -3rem;
+      width: 1px; background: rgba(200,131,42,.2);
+    }
+    .history-entry:last-child::before { display: none; }
+    .history-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--rust); text-align: right;
+      padding-top: .2rem;
+    }
+    .history-dot {
+      position: absolute; left: 36px; top: .4rem;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--ochre); border: 2px solid var(--cream);
+    }
+    .history-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: var(--ink); margin-bottom: .6rem;
+    }
+    .history-content p { font-size: .9rem; line-height: 1.8; color: #4A350A; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      padding: 4rem 6rem 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem;
+    }
+    .footer-brand .nav-logo { font-size: 1.6rem; }
+    .footer-brand p {
+      margin-top: 1rem; font-size: .82rem; line-height: 1.8;
+      color: rgba(245,237,216,.4);
+    }
+    .footer-col h4 {
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li {
+      padding: .4rem 0;
+      font-size: .83rem; color: rgba(245,237,216,.45);
+      cursor: pointer; transition: color .2s;
+    }
+    .footer-col li:hover { color: var(--cream); }
+    .footer-bottom {
+      grid-column: 1 / -1;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.07);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p { font-size: .72rem; color: rgba(245,237,216,.3); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      to { transform: scaleY(1); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ─── REVEAL ON SCROLL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .8s, transform .8s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      section { padding: 5rem 2rem; }
+      nav { padding: 1rem 2rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 8rem 2rem 4rem; }
+      .hero-right { display: none; }
+      .about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+      .about-visual { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: unset; }
+      .gallery-cell { grid-column: auto !important; grid-row: auto !important; height: 180px; }
+      .history-layout { grid-template-columns: 1fr; }
+      .history-aside { position: static; }
+      footer { grid-template-columns: 1fr; padding: 4rem 2rem 2rem; }
+      .footer-bottom { flex-direction: column; gap: 1rem; }
+      .quote-section { padding: 5rem 2rem; }
+      .gallery-inner { padding: 0 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hò Quảng</div>
+  <ul class="nav-links">
+    <li><a href="#about">Giới thiệu</a></li>
+    <li><a href="#features">Đặc điểm</a></li>
+    <li><a href="#melodies">Làn điệu</a></li>
+    <li><a href="#history">Lịch sử</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-line"></div>
+  <div class="hero-left">
+    <div class="hero-tag">Di sản dân ca Quảng Nam – Đà Nẵng</div>
+    <h1 class="hero-title">Hò<br><em>Quảng</em></h1>
+    <p class="hero-subtitle">Tiếng hò ngân vọng từ ruộng đồng, sông nước miền Trung — linh hồn của người dân xứ Quảng.</p>
+    <div class="hero-cta">
+      <a href="#about" class="btn">Khám phá <span class="btn-arrow">↓</span></a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-image">
+      <div class="hero-emblem">
+        <div class="emblem-ring"></div>
+        <div class="emblem-ring"></div>
+        <div class="emblem-ring"></div>
+        <div class="emblem-center">
+          <div class="emblem-text">🎵<br>Hò<br>Quảng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">Kéo xuống</div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-body reveal">
+    <div class="sect
